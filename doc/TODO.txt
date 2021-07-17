@@ -1,2 +1,11 @@
-[ ] CMake fetch content RapidXML
-[ ]
+[x] CMake fetch content catch2
+[x] find/replace resource tags in html
+	[x] css
+	[x] script
+	[x] images
+	[x] favicon
+[x] output index.h
+[ ] compress
+
+[ ] build for Arduino with cmake
+
