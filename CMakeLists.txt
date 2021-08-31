@@ -15,9 +15,13 @@ FetchContent_MakeAvailable(Catch2)
 
 #-------------------------------------------------------------------------------
 
-add_library(rapidXML INTERFACE)
+FetchContent_Declare(
+  rapidxml
+  GIT_REPOSITORY https://github.com/RobertWeber1/rapidxml.git
+  GIT_TAG        master)
 
-target_include_directories(rapidXML INTERFACE libs/rapidxml)
+FetchContent_MakeAvailable(rapidxml)
+
 
 #-------------------------------------------------------------------------------
 

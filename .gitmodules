@@ -1,3 +1,0 @@
-[submodule "libs/rapidxml"]
-	path = libs/rapidxml
-	url = https://github.com/discord/rapidxml.git
