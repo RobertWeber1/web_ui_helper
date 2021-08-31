@@ -244,8 +244,8 @@ struct Compressor
 		output
 			<< "static constexpr char "
 			<< array_name
-			<< "[] = R\"XML(";
-			<< data;
+			<< "[] = R\"XML("
+			<< data
 			<< ")XML\";\n";
 
 		for(int index = namespaces.size()-1; index >= 0; --index)
