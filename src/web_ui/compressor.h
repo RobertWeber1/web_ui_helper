@@ -244,38 +244,9 @@ struct Compressor
 		output
 			<< "static constexpr char "
 			<< array_name
-			<< "["
-			<< data.size()
-			<< "] = {\n\t";
-
-		auto to_hex =
-			[](char c)
-			{
-				std::stringstream result("0x");
-				return result;
-			};
-
-		int char_count = 0;
-
-		for(size_t i = 0; i < data.size(); ++i)
-		{
-			output
-				<< "0x" << std::setw(2) << std::setfill('0') << std::hex
-				<< (uint16_t(data[i])&uint16_t(0x00ff));
-
-			if(++char_count == 13)
-			{
-				char_count = 0;
-				output << ",\n\t";
-			}
-			else if(i < data.size() - 1)
-			{
-				output << ", ";
-			}
-
-		}
-
-		output << "};\n";
+			<< "[] = R\"XML(";
+			<< data;
+			<< ")XML\";\n";
 
 		for(int index = namespaces.size()-1; index >= 0; --index)
 		{
