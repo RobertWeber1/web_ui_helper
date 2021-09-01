@@ -1,5 +1,6 @@
 
+//test1
 function display_msg()
 {
-   console.log("Hello World!");
+   /*test2*/console.log("Hello World!"); //test3
 }

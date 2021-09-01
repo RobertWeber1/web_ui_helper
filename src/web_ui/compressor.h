@@ -29,9 +29,66 @@ struct Compressor
 		return detail::to_base_64(get_file_content(name));
 	}
 
-	static std::string remove_ws(std::string content)
+	enum class CommentState
 	{
-		bool first_space = false;
+		NoComment,
+		SingleLineComment,
+		MultiLineComment
+	};
+
+	static std::string remove_ws(std::string content, bool remove_comments = false)
+	{
+		if(remove_comments)
+		{
+			CommentState state = CommentState::NoComment;
+			for(size_t index = 0; index < content.size()-1; ++index)
+			{
+				switch(state)
+				{
+				case CommentState::NoComment:
+					if(content[index] == '/')
+					{
+						if(content[index+1] == '/')
+						{
+							state = CommentState::SingleLineComment;
+							content[index] = ' ';
+							content[index+1] = ' ';
+						}
+						else if(content[index+1] == '*')
+						{
+							state = CommentState::MultiLineComment;
+							content[index] = ' ';
+							content[index+1] = ' ';
+						}
+					}
+					break;
+
+				case CommentState::SingleLineComment:
+					if(content[index] == '\n')
+					{
+						state = CommentState::NoComment;
+					}
+					else
+					{
+						content[index] = ' ';
+					}
+					break;
+
+				case CommentState::MultiLineComment:
+					if(content[index] == '*' and content[index+1] == '/')
+					{
+						state = CommentState::NoComment;
+						content[index] = ' ';
+						content[index+1] = ' ';
+					}
+					else
+					{
+						content[index] = ' ';
+					}
+					break;
+				}
+			}
+		}
 
 		std::replace_if(
 			content.begin(),
@@ -42,6 +99,7 @@ struct Compressor
 			},
 			' ');
 
+		bool first_space = false;
 		content.erase(
 			std::remove_if(
 				content.begin(),
@@ -79,7 +137,12 @@ struct Compressor
 
 	static std::string get_file_content_without_ws(std::string const& name)
 	{
-		return  remove_ws(get_file_content(name));
+		return remove_ws(get_file_content(name), false);
+	}
+
+	static std::string get_file_content_without_ws_and_comments(std::string const& name)
+	{
+		return remove_ws(get_file_content(name), true);
 	}
 
 	template<class Func>
@@ -144,7 +207,7 @@ struct Compressor
 								base_dir + node->first_attribute("href")->value();
 							char * content =
 								doc.allocate_string(
-									get_file_content_without_ws(path).c_str());
+									get_file_content_without_ws_and_comments(path).c_str());
 
 							return doc.allocate_node(
 								rapidxml::node_element,
@@ -174,7 +237,7 @@ struct Compressor
 
 					char * content =
 						doc.allocate_string(
-							get_file_content_without_ws(path).c_str());
+							get_file_content_without_ws_and_comments(path).c_str());
 
 					node->value(content);
 				}

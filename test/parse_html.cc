@@ -56,7 +56,7 @@ TEST_CASE("replace stylesheet-link-tag with style-tag")
 			R"XML(<html><link rel="stylesheet" type="text/css" href="style.css"/></html>)XML",
 			TEST_DATA_PATH,
 			false)
-		== "<html><style>body { background-color: lightblue; } </style></html>");
+		== "<html><style> body { background-color: lightblue; } </style></html>");
 }
 
 TEST_CASE("replace faviocn ref with file base64 encoded content")
