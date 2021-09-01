@@ -48,6 +48,10 @@ target_link_libraries(test-WebUI
 	PRIVATE ${PROJECT_NAME}_util
 )
 
+target_compile_definitions(test-WebUI
+	PRIVATE -DTEST_DATA_PATH="${CMAKE_CURRENT_SOURCE_DIR}/test/content/"
+)
+
 #-------------------------------------------------------------------------------
 
 add_executable(html2header
